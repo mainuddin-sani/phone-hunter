@@ -28,10 +28,10 @@ const ProductShow = (data, isShowing)=>{
                 <img src=${product.image} alt="Shoes" class="rounded-xl" />
             </figure>
             <div class="card-body items-center text-center">
-                <h2 class="card-title">S${product.phone_name}</h2>
+                <h2 class="card-title">${product.phone_name}</h2>
                 <p>If a dog chews shoes whose shoes does he choose?</p>
                 <div class="card-actions">
-                <button class="btn btn-primary">Buy Now</button>
+                <button class="btn btn-primary" onclick="showDetails('${product.slug}'); my_modal.showModal()" >Show Details</button>
                 </div>
             </div>
         </div>
@@ -62,4 +62,15 @@ const loaderSpinner = (isLoading)=>{
 // show all product
 const showProduct = ()=>{
     searchProduct(true);
+}
+
+// show all details
+const showDetails = async (slug)=>{
+    fetch(`https://openapi.programming-hero.com/api/phone/${slug}`)
+    .then(res=>res.json())
+    .then(data => {
+        document.getElementById('title').innerText = data.data.name
+    });
+
+    
 }
