@@ -1,22 +1,26 @@
 // api loaded
-function loaded(productSearch){
+function loaded(productSearch, isShowing){
     fetch(`https://openapi.programming-hero.com/api/phones?search=${productSearch}`)
     .then(res=>res.json())
-    .then(data=>ProductShow(data.data))
+    .then(data=>ProductShow(data.data, isShowing))
 }
 
 // product show
-const ProductShow = (data)=>{
+const ProductShow = (data, isShowing)=>{
     const productLoad = document.getElementById('product-container');
     const showAllBtn = document.getElementById('show-all');
     productLoad.textContent = '';
     // product slice show
-    data = data.slice(0,6);
-    if(data.length > 6){
+    if(data.length > 6 && !isShowing){
         showAllBtn.classList.remove('hidden');
+    }else {
+        showAllBtn.classList.add('hidden');
     }
+    if(!isShowing){
+        data = data.slice(0,6);
+    }
+    
     data.forEach(product => {
-        console.log(product);
         let phoneCard = document.createElement('div');
         phoneCard.innerHTML = `
         <div class="card border rounded-lg">
@@ -38,13 +42,14 @@ const ProductShow = (data)=>{
 }
 
 // product search
-const searchProduct = ()=>{
+const searchProduct = (isShowing)=>{
     const search = document.getElementById('product-search').value;
-    loaded(search);
+    loaded(search, isShowing);
     loaderSpinner(true);
+    console.log('show all', isShowing);
 }
 
-
+// after product show loader add
 const loaderSpinner = (isLoading)=>{
     const loader = document.getElementById('loader');
     if(isLoading){
@@ -52,4 +57,9 @@ const loaderSpinner = (isLoading)=>{
     }else {
         loader.classList.add('hidden');
     }
+}
+
+// show all product
+const showProduct = ()=>{
+    searchProduct(true);
 }
